@@ -17,7 +17,7 @@ BOT_TOKEN = getenv("BOT_TOKEN")
 MONGO_DB_URI = getenv("MONGO_DB_URI", None)
 
 API_URL = getenv("API_URL", 'https://api.thequickearn.xyz') #youtube song url
-API_KEY = getenv("API_KEY", 'NxGBNexGenBots254c6b') # youtube song api ke # -------------------------------------------------------------------------#
+API_KEY = getenv("API_KEY", 'NxGBNexGenBots4556e3') # youtube song api ke # -------------------------------------------------------------------------#
 
 # For - downloads
 DOWNLOADS_DIR = "downloads"
