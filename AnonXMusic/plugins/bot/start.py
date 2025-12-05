@@ -1,5 +1,6 @@
 import time
 import random
+import asyncio
 from pyrogram import filters
 from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
@@ -25,30 +26,59 @@ from strings import get_string
 
 #--------------------------
 
-DEEP_VID = [
-"https://files.catbox.moe/5n9qbw.mp4",
-"https://files.catbox.moe/zgh9rv.mp4",
-"https://files.catbox.moe/5hsrcj.mp4",
-"https://files.catbox.moe/9nwtcm.mp4",
-"https://files.catbox.moe/zel6kq.mp4",
-"https://files.catbox.moe/x36bl7.mp4",
-"https://files.catbox.moe/wyt9n5.mp4",
-"https://files.catbox.moe/fdo5j5.mp4",
-"https://files.catbox.moe/meljwi.mp4",
-
-]
+DEEP_IMG = "https://files.catbox.moe/cteuxa.jpg"
 
 
 @app.on_message(filters.command(["start"]) & filters.private & ~BANNED_USERS)
 @LanguageStart
 async def start_pm(client, message: Message, _):
+    chat_id = message.chat.id
     await add_served_user(message.from_user.id)
+    
+    # 🕊️ Auto Reaction on /start
+    try:
+        await message.react("🕊️")
+    except:
+        pass
+    
+    # 🎭 Typing Effect - Ding Dong
+    try:
+        vip = await message.reply_text("ᴅιиg ᴅσиg ꨄ︎❣️.....")
+        for i in range(5):
+            dots = "." * (5 - i)
+            extra_dots = "." * i
+            await vip.edit_text(f"ᴅιиg ᴅσиg ꨄ︎{dots}❣️{extra_dots}")
+            await asyncio.sleep(0.2)
+        await vip.delete()
+
+        # 🎭 Typing Effect - "Starting..."
+        vips = await message.reply_text("ѕ")
+        steps = ["ѕт", "ѕтα", "ѕтαя", "ѕтαят", "ѕтαятι", 
+                 "ѕтαятιи", "ѕтαятιиg", "ѕтαятιиg.", "ѕтαятιиg...."]
+        for step in steps:
+            await asyncio.sleep(0.1)
+            await vips.edit_text(step)
+        await asyncio.sleep(0.2)
+        await vips.delete()
+
+        # 🎭 Sticker Send & Delete (3 sec)
+        sticker = await client.send_sticker(
+            chat_id=chat_id,
+            sticker="CAACAgUAAxkBAAIM8Gfe5UtCwBaRPvRsEYtymVXgTyK4AAIUEAAC5XDJVihzQRaTFdEAAR4E"
+        )
+        await asyncio.sleep(3)
+        await sticker.delete()
+        await asyncio.sleep(0.5)
+    except Exception as e:
+        print(f"Error in animation: {e}")
+
+    # Continue with original logic
     if len(message.text.split()) > 1:
         name = message.text.split(None, 1)[1]
         if name[0:4] == "help":
             keyboard = help_pannel(_)
-            return await message.reply_video(
-                random.choice(DEEP_VID),
+            return await message.reply_photo(
+                photo=DEEP_IMG,
                 caption=_["help_1"].format(config.SUPPORT_CHAT),
                 reply_markup=keyboard,
             )
@@ -99,8 +129,8 @@ async def start_pm(client, message: Message, _):
                 )
     else:
         out = private_panel(_)
-        await message.reply_video(
-            random.choice(DEEP_VID),
+        await message.reply_photo(
+            photo=DEEP_IMG,
             caption=_["start_2"].format(message.from_user.mention, app.mention),
             reply_markup=InlineKeyboardMarkup(out),
         )
@@ -116,8 +146,8 @@ async def start_pm(client, message: Message, _):
 async def start_gp(client, message: Message, _):
     out = start_panel(_)
     uptime = int(time.time() - _boot_)
-    await message.reply_video(
-        random.choice(DEEP_VID),
+    await message.reply_photo(
+        photo=DEEP_IMG,
         caption=_["start_1"].format(app.mention, get_readable_time(uptime)),
         reply_markup=InlineKeyboardMarkup(out),
     )
@@ -151,8 +181,8 @@ async def welcome(client, message: Message):
                     return await app.leave_chat(message.chat.id)
 
                 out = start_panel(_)
-                await message.reply_video(
-                    random.choice(DEEP_VID),
+                await message.reply_photo(
+                    photo=DEEP_IMG,
                     caption=_["start_3"].format(
                         message.from_user.first_name,
                         app.mention,
@@ -165,5 +195,3 @@ async def welcome(client, message: Message):
                 await message.stop_propagation()
         except Exception as ex:
             print(ex)
-
-
